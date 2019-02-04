@@ -29,286 +29,296 @@ class EscapeRoom:
 
         def look(cp):
             if len(cp) == 1:  # add time functionality
-                print("You are in a locked room. There is only one door "
-                      "and it has a numeric keypad. Above the door is a clock that reads {}. "
-                      "\nAcross from the door is a large mirror. Below the mirror is an old chest."
-                      "\n"
-                      "\nThe room is old and musty and the floor is creaky and warped.".format(self.time))
+                return "You are in a locked room. There is only one door" \
+                       "\nand it has a numeric keypad. Above the door is a clock that reads {}." \
+                       "\nAcross from the door is a large mirror. Below the mirror is an old chest." \
+                       "\n\nThe room is old and musty and the floor is creaky and warped.".format(self.time)
 
             elif len(cp) == 2:
 
                 if cp[1] == 'door' and not self.on_glasses:
-                    print("The door is strong and highly secured. The door is locked and requires a 4-digit code to "
-                          "open.")
+                    return "The door is strong and highly secured. The door is locked and requires a 4-digit code to open."
                 elif cp[1] == 'door' and self.on_glasses:
-                    print("The door is strong and highly secured. The door is locked and requires a 4-digit code "
-                          "to open. But now you're wearing these glasses you notice something! "
-                          "There are smudges on the digits {}.".format(",".join(sorted(str(self.code)))))
+                    return "The door is strong and highly secured. The door is locked and requires a 4-digit code " \
+                           "to open. But now you're wearing these glasses you notice something! " \
+                           "There are smudges on the digits {}.".format(",".join(sorted(set(str(self.code)))))
 
                 elif cp[1] == 'mirror' and not self.pin:  # hairpin not in hair
-                    print("You look in the mirror and see yourself.")
                     self.mirror = True
+                    return "You look in the mirror and see yourself."
                 elif cp[1] == 'mirror' and self.pin:
-                    print("You look in the mirror and see yourself... wait, there's a hairpin in your hair. "
-                          "Where did that come from?")
                     self.mirror = True
+                    return "You look in the mirror and see yourself... wait, there's a hairpin in your hair. " \
+                           "Where did that come from?"
 
                 elif cp[1] == 'chest':
-                    print("An old chest. It looks worn, but it's still sturdy.")
+                    return "An old chest. It looks worn, but it's still sturdy."
 
                 elif cp[1] == 'floor':
-                    print("The floor makes you nervous. It feels like it could fall in. One of the boards is loose.")
                     self.floor = True
+                    return "The floor makes you nervous. It feels like it could fall in. One of the boards is loose."
 
                 elif cp[1] == 'board' and not self.floor:
-                    print("You don't see that here.")
+                    return "You don't see that here."
                 elif cp[1] == 'board' and not self.open_board:
-                    print("The board is loose, but won't come up when you pull on it. "
-                          "Maybe if you pried it open with something.")
+                    return "The board is loose, but won't come up when you pull on it. " \
+                           "Maybe if you pried it open with something."
                 elif cp[1] == 'board' and self.open_board:
-                    print("The board has been pulled open. You can look inside.")
+                    return "The board has been pulled open. You can look inside."
 
                 elif cp[1] == 'hairpin' and not self.mirror:
-                    print("You don't see that here.")
+                    return "You don't see that here."
                 elif cp[1] == 'hairpin' and self.mirror:
-                    print("You see nothing special.")
+                    return "You see nothing special."
 
                 elif cp[1] == 'hammer' and not self.hammer:
-                    print("You don't see that here.")
+                    return "You don't see that here."
                 elif cp[1] == 'hammer' and self.hammer:
-                    print("You see nothing special.")
+                    return "You see nothing special."
 
                 elif cp[1] == 'glasses' and 'glasses' not in self.inventory:
-                    print("You don't see that here.")
+                    return "You don't see that here."
                 elif cp[1] == 'glasses' and 'glasses' in self.inventory:
-                    print("These look like spy glasses. Maybe they reveal a clue!")
+                    return "These look like spy glasses. Maybe they reveal a clue!"
 
                 elif cp[1] == 'clock':
-                    print("You see nothing special.")
+                    return "You see nothing special."
 
                 else:
-                    print("You don't see that here.")
+                    return "You don't see that here."
 
             elif cp[1] == 'in' and len(cp) == 3:
                 if cp[2] == 'chest' and not self.hammer and self.open_chest:
-                    print("Inside the chest you see: a hammer.")
+                    return "Inside the chest you see: a hammer."
                 elif cp[2] == 'chest' and self.hammer:
-                    print("Inside the chest you see: .")
+                    return "Inside the chest you see: ."
                 elif cp[2] == 'chest' and self.hammer and not self.open_chest:
-                    print("Its not open!")  # need to change this !
+                    return "Its not open!"  # need to change this !
 
                 elif cp[2] == 'board' and not self.glasses:
-                    print("Inside the board you see: a glasses.")
+                    return "Inside the board you see: a glasses."
                 elif cp[2] == 'board' and self.glasses:
-                    print("Inside the board you see: .")
+                    return "Inside the board you see: ."
+                elif cp[2] == 'board' and not self.open_board:
+                    return "Although loose, you can't look in the board until it's pried open."
 
                 else:
-                    print("You can't look in that!")
+                    return "You can't look in that!"
 
             else:
-                print("You can't do that.")
+                return "You can't do that."
 
         def wear(cp):
             if cp[1] == 'glasses':
                 if not self.on_glasses:
                     if 'glasses' in self.inventory:  # write an inv list
-                        print("You are now wearing the glasses.")
                         self.on_glasses = True
+                        return "You are now wearing the glasses."
                     else:
-                        print("You don't have a glasses.")
+                        return "You don't have a glasses."
                 elif self.on_glasses:
-                    print("You're already wearing them!")
+                    return "You're already wearing them!"
             elif len(cp) == 2:
-                print("You don't have a {}.".format(cp[1]))
+                return "You don't have a {}.".format(cp[1])
             else:
-                print("You can't do that.")
+                return "You can't do that."
 
         def get(cp):
             if len(cp) == 2:  # get <object>
                 if cp[1] == 'hairpin' and not self.mirror:
-                    print("You don't see that.")
+                    return "You don't see that."
                 elif cp[1] == 'hairpin' and self.mirror and 'hairpin' not in self.inventory:
-                    print("You got it.")
                     self.inventory.append('hairpin')
                     self.pin = False
+                    return "You got it."
                 elif cp[1] == 'hairpin' and 'hairpin' in self.inventory:
-                    print("You already have that.")
+                    return "You already have that."
 
                 elif cp[1] == 'board' and not self.floor:
-                    print("You don't see that.")
+                    return "You don't see that."
                 elif cp[1] == 'board' and self.floor:
-                    print("You can't get that.")
+                    return "You can't get that."
 
                 elif cp[1] == 'door' or 'clock' or 'mirror' or 'chest' or 'floor':
-                    print("You can't get that.")
+                    return "You can't get that."
 
                 elif cp[1] == 'hammer' and 'hammer' in self.inventory:
-                    print("You already have that.")
+                    return "You already have that."
 
                 elif cp[1] == 'glasses' and 'glasses' in self.inventory:
-                    print("You already have that.")
+                    return "You already have that."
 
                 else:
-                    print("You don't see that.")
+                    return "You don't see that."
 
             if len(cp) > 2 and cp[2] == 'from':
                 if cp[1] == 'hammer' and cp[3] == 'chest' and not self.open_chest:
-                    print("It's not open.")
+                    return "It's not open."
                 elif cp[1] == 'hammer' and cp[3] == 'chest' and self.open_chest and not self.hammer:
-                    print("You got it.")
                     self.hammer = True
                     self.inventory.append('hammer')
+                    return "You got it."
                 elif cp[1] == 'hammer' and cp[3] == 'chest' and self.open_chest and self.hammer:
-                    print("You don't see that.")
+                    return "You don't see that."
 
                 elif cp[1] == 'glasses' and cp[3] == 'board' and not self.open_board:
-                    print("It's not open.")
+                    return "It's not open."
                 elif cp[1] == 'glasses' and cp[3] == 'board' and self.open_board and 'glasses' not in self.inventory:
-                    print("You got it.")
                     self.inventory.append('glasses')
+                    return "You got it."
                 elif cp[1] == 'glasses' and cp[3] == 'board' and self.open_board and 'glasses' in self.inventory:
-                    print("You don't see that.")
+                    return "You don't see that."
+
+                else:
+                    return "You can't get something out of that!"
 
         def inventory():
             inv = ["a {}".format(object) for object in self.inventory]
             out_inv = ", ".join(inv)
-            print("You are carrying {}.".format(out_inv))
+            return "You are carrying {}.".format(out_inv)
 
         def unlock(cp):
             if cp[1] == 'chest':
                 if len(cp) > 2 and cp[2] == 'with':
                     if cp[3] == 'hairpin' and 'hairpin' in self.inventory and self.unlock_chest:
-                        print("It's already unlocked.")
+                        return "It's already unlocked."
                     elif cp[3] == 'hairpin' and 'hairpin' in self.inventory and not self.unlock_chest:
-                        print("You hear a click! It worked!")
                         self.unlock_chest = True
+                        return "You hear a click! It worked!"
                     elif cp[3] != 'hairpin':
-                        print("You don't have a {}.".format(cp[3]))
+                        return "You don't have a {}.".format(cp[3])
                     else:
-                        print("you can't do that.")
+                        return "you can't do that."
                 else:
-                    print("You can't do that.")
+                    return "You can't do that."
 
             elif cp[1] == 'door' and self.unlock_door:  # check this!
-                print("It's already unlocked.")
+                return "It's already unlocked."
             elif cp[1] == 'door' and cp[2] == 'with':
                 if len(cp[3]) < 4:
-                    print("The code must be 4 digits.")
+                    return "The code must be 4 digits."
                 elif not cp[3].isdigit():
-                    print("That's not a valid code.")
+                    return "That's not a valid code."
                 elif int(cp[3]) == self.code and not self.unlock_door:
-                    print("You hear a click! It worked!")
                     self.unlock_door = True
+                    return "You hear a click! It worked!"
                 elif int(cp[3]) != self.code:
-                    print("That's not the right code!")
+                    return "That's not the right code!"
 
             elif cp[3] == 'hairpin' and not self.mirror:
-                print("You don't see that here.")
+                return "You don't see that here."
 
             elif cp[3] == 'board' and not self.floor:
-                print("You don't see that here.")
+                return "You don't see that here."
 
             elif cp[3] == 'hammer' and 'hammer' not in self.inventory:
-                print("You don't see that here.")
+                return "You don't see that here."
 
             elif cp[3] == 'glasses' and 'glasses' not in self.inventory:
-                print("You don't see that here.")
+                return "You don't see that here."
 
             elif cp[1] in [clock, mirror, hairpin, floor, board, hammer, glasses]:
-                print("You can't unlock that!")
+                return "You can't unlock that!"
 
             else:
-                print("You don't see that here.")
+                return "You don't see that here."
 
         def open(cp):
             if cp[1] == 'chest':
                 if not self.unlock_chest:
-                    print("It's locked.")
+                    return "It's locked."
                 elif self.unlock_chest and not self.open_chest:  #write unlock function
-                    print("You open the chest.")
                     self.open_chest = True
+                    return "You open the chest."
                 elif self.open_chest:
-                    print("It's already open!")
+                    return "It's already open!"
                 else:
-                    print("You can't do that.")
+                    return "You can't do that."
 
             elif cp[1] == 'door':
                 if not self.unlock_door:
-                    print("It's locked.")
+                    return "It's locked."
                 elif self.unlock_door and not self.open_door:
-                    print("You open the door.")
                     self.open_door = True
                     if self.time != 0:
                         self.stat = "escaped"
+                    return "You open the door."
 
             elif cp[1] == 'hairpin' and not self.mirror:
-                print("You don't see that.")
+                return "You don't see that."
 
             elif cp[1] == 'board' and not self.floor:
-                print("You don't see that.")
+                return "You don't see that."
 
             elif cp[1] == 'hammer' and 'hammer' not in self.inventory:
-                print("You don't see that.")
+                return "You don't see that."
 
             elif cp[1] == 'glasses' and 'glasses' not in self.inventory:
-                print("You don't see that.")
+                return "You don't see that."
 
             elif cp[1] in [clock, mirror, hairpin, floor, board, hammer, glasses]:
-                print("You can't open that!")
+                return "You can't open that!"
 
             else:
-                print("You don't see that.")
+                return "You don't see that."
 
         def pry(cp):
             if cp[1] == 'board' and self.open_board:
-                print("It's already pried open.")
+                return "It's already pried open."
             elif cp[1] == 'board' and cp[2] == 'with':
                 if not self.floor:
-                    print("You don't see that.")
+                    return "You don't see that."
                 elif cp[3] == 'hammer' and 'hammer' not in self.inventory:
-                    print("You don't have a hammer.")
+                    return "You don't have a hammer."
                 elif cp[3] == 'hammer' and 'hammer' in self.inventory:
-                    print("You use the hammer to pry open the board. It takes some work, but with "
-                          "some blood and sweat, you mange to get it open.")
                     self.open_board = True
+                    return "You use the hammer to pry open the board. It takes some work, but with " \
+                           "some blood and sweat, you manage to get it open."
+                elif cp[3] != 'hammer' and cp[3] in self.inventory:
+                    return "Don't be stupid! That won't work!"
                 else:
-                    print("You don't have a {}.".format(cp[3]))
+                    return "You don't have a {}.".format(cp[3])
 
             elif cp[1] == 'hairpin' and cp[2] == 'with' and not self.mirror:
-                print("You don't see that.")
+                return "You don't see that."
 
             elif cp[1] == 'hammer' and cp[2] == 'with' and 'hammer' not in self.inventory:
-                print("You don't see that.")
+                return "You don't see that."
 
             elif cp[1] == 'glasses' and cp[2] == 'with' and 'glasses' not in self.inventory:
-                print("You don't see that.")
+                return "You don't see that."
 
             elif cp[1] in [door, clock, mirror, hairpin, chest, floor, hammer, glasses]:
-                print("Don't be stupid! That won't work!")
+                return "Don't be stupid! That won't work!"
 
             else:
-                print("You don't see that.")
+                return "You don't see that."
 
         if commandParts[0] == 'look':
-            look(commandParts)
+            out = look(commandParts)
         elif commandParts[0] == 'get':
-            get(commandParts)
+            out = get(commandParts)
         elif commandParts[0] == 'inventory':
-            inventory()
+            out = inventory()
         elif commandParts[0] == 'unlock':
-            unlock(commandParts)
+            out = unlock(commandParts)
         elif commandParts[0] == 'open':
-            open(commandParts)
+            out = open(commandParts)
         elif commandParts[0] == 'pry':
-            pry(commandParts)
+            out = pry(commandParts)
         elif commandParts[0] == 'wear':
-            wear(commandParts)
+            out = wear(commandParts)
         else:
-            print("You can't do that.")
+            out = "You can't do that."
 
         if self.time == 0:
-            print("Oh no! The clock starts ringing!!! After a few seconds, the room fills with a deadly gas...")
             self.stat = 'dead'
+            out = out + "\nOh no! The clock starts ringing!!! After a few seconds, the room fills with a deadly " \
+                        "gas..."+"\nYou died!"
+        elif self.stat == 'escaped':
+            out += "\nYou escaped!"
+
+        return out
             # status()
 
         # if self.stat == 'dead':
@@ -326,13 +336,15 @@ def main():
     room.start()
     while room.status() == "locked":
         command = input(">> ")
-        room.command(command)
-        # output = room.command(command)
-        # print(output)
+        # room.command(command)
+        output = room.command(command)
+        print(output)
     if room.status() == "escaped":
-        print("Congratulations! You escaped!")
+        # print("You escaped!")
+        sys.exit()
     else:
-        print("Sorry. You died.")
+        # print("You died!")
+        sys.exit()
 
 if __name__ == "__main__":
     main()
