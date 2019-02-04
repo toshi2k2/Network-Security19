@@ -20,18 +20,12 @@ class EscapeRoom:
         self.code = random.randint(0, 9999)
         self.unlock_door = False  # door is locked
         self.open_door = False  # door is not open
-        self.string_code = str(self.code)
 
     def command(self, command_string):
         '''This command accepts the user's command within the game'''
 
         self.time -= 1
         commandParts = command_string.split(" ")
-
-        while len(self.string_code) < 4:
-            self.string_code = '0' + self.string_code
-
-        # print("code:", self.string_code)  # comment this out
 
         def look(cp):
             if len(cp) == 1:  # add time functionality
@@ -47,7 +41,7 @@ class EscapeRoom:
                 elif cp[1] == 'door' and self.on_glasses:
                     return "The door is strong and highly secured. The door is locked and requires a 4-digit code " \
                            "to open. But now you're wearing these glasses you notice something! " \
-                           "There are smudges on the digits {}.".format(",".join(sorted(set(self.string_code))))
+                           "There are smudges on the digits {}.".format(",".join(sorted(set(str(self.code)))))
 
                 elif cp[1] == 'mirror' and not self.pin:  # hairpin not in hair
                     self.mirror = True
@@ -205,10 +199,10 @@ class EscapeRoom:
                     return "The code must be 4 digits."
                 elif not cp[3].isdigit():
                     return "That's not a valid code."
-                elif cp[3] == self.string_code and not self.unlock_door:
+                elif int(cp[3]) == self.code and not self.unlock_door:
                     self.unlock_door = True
                     return "You hear a click! It worked!"
-                elif cp[3] != self.string_code:
+                elif int(cp[3]) != self.code:
                     return "That's not the right code!"
 
             elif cp[3] == 'hairpin' and not self.mirror:
@@ -320,9 +314,9 @@ class EscapeRoom:
         if self.time == 0:
             self.stat = 'dead'
             out = out + "\nOh no! The clock starts ringing!!! After a few seconds, the room fills with a deadly " \
-                        "gas..."
+                        "gas..."  #+"\nYou died!"
         # elif self.stat == 'escaped':
-            # out += "\nYou escaped!"
+        #     out += "\nYou escaped!"
 
         return out
             # status()
@@ -346,11 +340,11 @@ def main():
         output = room.command(command)
         print(output)
     if room.status() == "escaped":
-        # print("You escaped!")
-        sys.exit()
+        print("You escaped!")
+        # sys.exit()
     else:
-        # print("You died!")
-        sys.exit()
+        print("You died!")
+        # sys.exit()
 
 if __name__ == "__main__":
     main()
