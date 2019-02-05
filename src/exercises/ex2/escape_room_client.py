@@ -3,15 +3,15 @@ import os
 import subprocess
 
 s = socket.socket()
-host = '192.168.1.153'
+host = '10.194.111.27'
 port = 9999
 
 s.connect((host, port))
 
 while True:
-    command = input()
-    s.sendall(command)
+    command = input(">> ")
+    s.sendall(command.encode('utf-8'))
     data = s.recv(1024)
-    print(data)
+    print(data.decode('utf-8'))
     if command == 'quit':
         break

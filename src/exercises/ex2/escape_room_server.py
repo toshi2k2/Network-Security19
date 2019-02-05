@@ -24,6 +24,7 @@ while True:  # for keeping connection open
     print("Connection has been established ! " + "IP" + address[0] + " Port" + str(address[1]))
 
     room = EscapeRoom()
+    room.start()
     while room.status() == 'locked':
         cmd = str(conn.recv(1024), "utf-8")
         print("command received:", cmd)
@@ -31,7 +32,10 @@ while True:  # for keeping connection open
             conn.close()  # close connection
             s.close()  # close socket
             sys.exit()  # close cmd
+
         out = room.command(cmd)
         conn.send(str.encode(out))
+    print("closing connection")
     conn.close()
+    s.close()
 
