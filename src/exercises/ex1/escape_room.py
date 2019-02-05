@@ -20,6 +20,7 @@ class EscapeRoom:
         self.code = random.randint(0, 9999)
         self.unlock_door = False  # door is locked
         self.open_door = False  # door is not open
+
         self.string_code = str(self.code)
 
     def command(self, command_string):
@@ -31,10 +32,8 @@ class EscapeRoom:
         while len(self.string_code) < 4:
             self.string_code = '0' + self.string_code
 
-        # print("code:", self.string_code)  # comment this out
-
         def look(cp):
-            if len(cp) == 1:  # add time functionality
+            if len(cp) == 1:
                 return "You are in a locked room. There is only one door" \
                        "\nand it has a numeric keypad. Above the door is a clock that reads {}." \
                        "\nAcross from the door is a large mirror. Below the mirror is an old chest." \
@@ -233,7 +232,7 @@ class EscapeRoom:
             if cp[1] == 'chest':
                 if not self.unlock_chest:
                     return "It's locked."
-                elif self.unlock_chest and not self.open_chest:  #write unlock function
+                elif self.unlock_chest and not self.open_chest:
                     self.open_chest = True
                     return "You open the chest."
                 elif self.open_chest:
@@ -321,16 +320,7 @@ class EscapeRoom:
             self.stat = 'dead'
             out = out + "\nOh no! The clock starts ringing!!! After a few seconds, the room fills with a deadly " \
                         "gas..."
-        # elif self.stat == 'escaped':
-            # out += "\nYou escaped!"
-
         return out
-            # status()
-
-        # if self.stat == 'dead':
-        #     sys.exit()
-        # if self.stat == 'escaped':
-        #     sys.exit()
 
     def status(self):
         '''Reports whether the users is "dead", "locked", or "escaped"'''
