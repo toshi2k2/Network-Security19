@@ -7,7 +7,6 @@ host = ""
 port = 9999
 s = socket.socket()
 # binding socket
-
 try:
     print("Binding the port " + str(port))
 
