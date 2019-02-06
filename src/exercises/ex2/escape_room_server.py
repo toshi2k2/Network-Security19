@@ -34,8 +34,13 @@ while True:  # for keeping connection open
             sys.exit()  # close cmd
 
         out = room.command(cmd)
+        if room.status() == 'dead':
+            out = out + '\n' + 'You died!'
+        elif room.status() == 'escaped':
+            out = out + '\n' + 'You escaped!'
         conn.send(str.encode(out))
     print("closing connection")
     conn.close()
     s.close()
+    sys.exit()
 
