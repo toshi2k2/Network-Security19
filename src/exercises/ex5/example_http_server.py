@@ -38,7 +38,8 @@ class ExampleHttpServer(asyncio.Protocol):
         error_file = '<html><head><title>404 Not Found</title></head><body bgcolor="red"><center>' \
                      '<h1>404 Not Found</h1></center><hr><center>nginx</center></body></html>'
         error = 'HTTP/1.1 404 Not Found\r\nDate: '+ t +'\r\nServer: NetSec Prototype Server 1.0\r\n' \
-                                                       'Content-Length: '+str(len(error_file))+'\r\n\r\n'
+                                                       'Content-Length: '+str(len(error_file))+'\r\nContent-Type:' \
+                                                                                               ' text/html\r\n\r\n'
         command, vals = message.split('\r\n', 1)
 
         method, uri, version = command.split(' ')
